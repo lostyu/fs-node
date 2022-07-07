@@ -1,23 +1,38 @@
-const http = require('http');
+const express = require('express');
+const app = express();
+const port = 3000;
 
-const server = http.createServer((req, res)=>{
-  const data = {
-    "id": 1,
-    "name": "tony"
-  }
-
-  
-  const jsonData = JSON.stringify(data);
-
-  res.writeHead(200, {
-    'Content-type': 'application/json; charset=utf-8'
-  });
-
-  res.write(jsonData);
-  res.end();
-
+app.listen(port, ()=>{
+  console.log('🚀server is running');
 });
 
-server.listen(3000, ()=>{
-  console.log('🚀服务已启动');
+app.get('/', (req, res)=>{
+  res.send('hello')
+})
+
+const data = [
+  {
+    id: 1,
+    title: 'my',
+    author: 'tony'
+  },
+  {
+    id: 2,
+    title: 'you',
+    author: 'tom'
+  }
+];
+
+app.get('/posts', (req, res)=>{
+  res.send(data);
+});
+
+app.get('/posts/:postId', (req, res)=>{
+  // 获取params
+  const {postId} = req.params;
+
+  // 筛选数据
+  const posts = data.filter(item=> item.id == postId);
+
+  res.send(posts[0]);
 });
