@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { MD5_SALT } from "../app/app.config";
+import { MD5_SALT, PUBLIC_KEY } from "../app/app.config";
 import * as userService from "../user/user.service";
 import { md5 } from "../utils/md5";
+import jwt from "jsonwebtoken";
 
 export const validateLoginData = async (
   req: Request,
@@ -29,4 +30,29 @@ export const validateLoginData = async (
   req.body.user = user;
 
   next();
+};
+
+/**
+ * 验证token授权
+ */
+export const authGuard = (req: Request, res: Response, next: NextFunction) => {
+  console.log("验证用户身份");
+
+  try {
+    // 获取头部 authorization
+    const authorization = req.header("authorization");
+    if (!authorization) throw new Error();
+
+    const token = authorization.replace("Bearer ", "");
+    if (!token) throw new Error();
+
+    // 验证token
+    jwt.verify(token, PUBLIC_KEY as string, {
+      algorithms: ["RS256"],
+    });
+
+    next();
+  } catch (error) {
+    next(new Error("UNAUTHORIZED"));
+  }
 };

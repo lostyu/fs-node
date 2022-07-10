@@ -38,6 +38,11 @@ export const defaultErrorHandler = (
       statusCode = 400;
       message = "用户密码错误";
       break;
+    case "UNAUTHORIZED":
+      statusCode = 401;
+      message = "请先登录";
+      break;
+
     default:
       statusCode = 500;
       message = "服务器错误";

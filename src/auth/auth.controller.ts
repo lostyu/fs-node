@@ -23,3 +23,10 @@ export const login = async (
     next(error);
   }
 };
+
+/**
+ * 验证用户身份
+ */
+export const validate = (req: Request, res: Response, next: NextFunction) => {
+  res.sendStatus(200);
+};
