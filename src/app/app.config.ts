@@ -16,3 +16,6 @@ export const {
 
 // 导出MD5_SALT
 export const { MD5_SALT } = process.env;
+
+// key
+export const { PRIVATE_KEY, PUBLIC_KEY } = process.env;

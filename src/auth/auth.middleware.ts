@@ -25,5 +25,8 @@ export const validateLoginData = async (
   const matched = md5(password + MD5_SALT) === user.password;
   if (!matched) return next(new Error("PASSWORD_DOSE_NOT_MATCH"));
 
+  // 添加user数据
+  req.body.user = user;
+
   next();
 };

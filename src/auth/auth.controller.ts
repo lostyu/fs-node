@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import * as userService from "../user/user.service";
+import { signToken } from "./auth.service";
 
 /**
  * 用户登录
@@ -9,7 +9,17 @@ export const login = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { name, password } = req.body;
+  const {
+    user: { id, name },
+  } = req.body;
 
-  res.send({ message: `欢迎回来，${name}` });
+  const payload = { id, name };
+
+  try {
+    const token = signToken({ payload });
+
+    res.send({ id, name, token });
+  } catch (error) {
+    next(error);
+  }
 };
