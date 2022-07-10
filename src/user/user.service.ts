@@ -26,8 +26,6 @@ export const getUserByName = async (name: string) => {
 
   const [data] = await connection.promise().query(statement, name);
 
-  console.log(data);
-
   // return (data as RowDataPacket[])[0];
   return (data as RowDataPacket)[0];
 };

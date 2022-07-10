@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import * as userService from "./user.service";
+import { md5 } from "../utils/md5";
+import { MD5_SALT } from "../app/app.config";
 
 export const validateUserData = async (
   req: Request,
@@ -19,6 +21,18 @@ export const validateUserData = async (
   console.log(user);
 
   if (user) return next(new Error("NAME_ALREADY_EXISTS"));
+
+  next();
+};
+
+export const hashPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { password } = req.body;
+
+  req.body.password = md5(password + MD5_SALT);
 
   next();
 };

@@ -13,3 +13,6 @@ export const {
   MYSQL_PASSWORD,
   MYSQL_DATABASE,
 } = process.env;
+
+// 导出MD5_SALT
+export const { MD5_SALT } = process.env;
