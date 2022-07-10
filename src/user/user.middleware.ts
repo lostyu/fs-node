@@ -14,5 +14,11 @@ export const validateUserData = async (
   if (!name) return next(new Error("NAME_IS_REQUIRED"));
   if (!password) return next(new Error("PASSWORD_IS_REQUIRED"));
 
+  // 查询name是否存在
+  const user = await userService.getUserByName(name);
+  console.log(user);
+
+  if (user) return next(new Error("NAME_ALREADY_EXISTS"));
+
   next();
 };
