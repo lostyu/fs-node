@@ -20,7 +20,7 @@ export const validateUserData = async (
   const user = await userService.getUserByName(name);
   console.log(user);
 
-  if (user) return next(new Error("NAME_ALREADY_EXISTS"));
+  if (user) return next(new Error("USER_ALREADY_EXISTS"));
 
   next();
 };

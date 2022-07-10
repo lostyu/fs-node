@@ -26,9 +26,17 @@ export const defaultErrorHandler = (
       statusCode = 400;
       message = "请提供密码";
       break;
-    case "NAME_ALREADY_EXISTS":
+    case "USER_ALREADY_EXISTS":
       statusCode = 409;
       message = "用户名已被占用";
+      break;
+    case "USER_DOSE_NOT_EXISTS":
+      statusCode = 400;
+      message = "用户不存在";
+      break;
+    case "PASSWORD_DOSE_NOT_MATCH":
+      statusCode = 400;
+      message = "用户密码错误";
       break;
     default:
       statusCode = 500;
