@@ -28,5 +28,7 @@ export const login = async (
  * 验证用户身份
  */
 export const validate = (req: Request, res: Response, next: NextFunction) => {
+  console.log(req.user);
+
   res.sendStatus(200);
 };

@@ -3,6 +3,7 @@ import { MD5_SALT, PUBLIC_KEY } from "../app/app.config";
 import * as userService from "../user/user.service";
 import { md5 } from "../utils/md5";
 import jwt from "jsonwebtoken";
+import { TokenPayload } from "./auth.interface";
 
 export const validateLoginData = async (
   req: Request,
@@ -47,9 +48,11 @@ export const authGuard = (req: Request, res: Response, next: NextFunction) => {
     if (!token) throw new Error();
 
     // 验证token
-    jwt.verify(token, PUBLIC_KEY as string, {
+    const decoded = jwt.verify(token, PUBLIC_KEY as string, {
       algorithms: ["RS256"],
     });
+
+    req.user = decoded as TokenPayload;
 
     next();
   } catch (error) {

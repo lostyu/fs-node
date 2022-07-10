@@ -16,6 +16,12 @@ export const index = async (
   }
 };
 
+/**
+ * 创建内容
+ * @param req
+ * @param res
+ * @param next
+ */
 export const store = async (
   req: Request,
   res: Response,
@@ -23,8 +29,11 @@ export const store = async (
 ) => {
   const { title, content } = req.body;
 
+  // 获取用户登录信息
+  const { id: userId } = req.user;
+
   try {
-    const data = await createPost({ title, content });
+    const data = await createPost({ title, content, userId });
     res.status(201).send(data);
   } catch (error) {
     next(error);
