@@ -42,6 +42,10 @@ export const defaultErrorHandler = (
       statusCode = 401;
       message = "请先登录";
       break;
+    case "USER_DOSE_NOT_OWN_RESOURCE":
+      statusCode = 403;
+      message = "你不能处理这个内容";
+      break;
 
     default:
       statusCode = 500;

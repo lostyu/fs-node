@@ -4,6 +4,7 @@ import * as userService from "../user/user.service";
 import { md5 } from "../utils/md5";
 import jwt from "jsonwebtoken";
 import { TokenPayload } from "./auth.interface";
+import { possess } from "./auth.service";
 
 export const validateLoginData = async (
   req: Request,
@@ -58,4 +59,57 @@ export const authGuard = (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     next(new Error("UNAUTHORIZED"));
   }
+};
+
+/**
+ * 访问控制
+ */
+interface AccessControlOptions {
+  possession?: boolean;
+}
+
+export const accessControl = (options: AccessControlOptions) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    console.log("访问控制");
+
+    //
+    const { possession } = options;
+
+    // 当前用户
+    const { id: userId } = req.user;
+
+    // 放行管理员
+    if (userId == 1) return next();
+
+    // 准备资源
+    const resourceIdParam = Object.keys(req.params)[0];
+    // console.log("resourceIdParam", resourceIdParam);
+
+    const resourceType = resourceIdParam.replace("Id", "");
+    // console.log("resourceType", resourceType);
+
+    const resourceId = parseInt(req.params[resourceIdParam], 10);
+    // console.log("resourceId", resourceId);
+
+    // 检查资源拥有权
+    if (possession) {
+      try {
+        if (userId) {
+          const ownResource = await possess({
+            resourceId,
+            resourceType,
+            userId,
+          });
+
+          if (!ownResource) {
+            return next(new Error("USER_DOSE_NOT_OWN_RESOURCE"));
+          }
+        }
+      } catch (error) {
+        return next(error);
+      }
+    }
+
+    next();
+  };
 };
