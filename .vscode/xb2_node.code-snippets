@@ -1,0 +1,17 @@
+{
+	"Express handler / middleware": {
+		"prefix": "eh",
+		"body": [
+			"/**",
+			" * $1",
+			" */",
+			" export const ${2:NAME} = async (",
+			"  req: Request,",
+			"  res: Response,",
+			"  next: NextFunction",
+			") => {",
+			"  $3",
+			"};"
+		]
+	}
+}
