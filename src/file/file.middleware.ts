@@ -24,15 +24,21 @@ export const fileProcessor = async (
   // 获取图像路径
   const { path } = (req as MulterRequest).file;
 
-  let image: Jimp;
+  let image: any;
 
   try {
     image = await Jimp.read(path);
-
-    console.log(image);
   } catch (error) {
-    next(error);
+    return next(error);
   }
+
+  const { imageSize, tags } = image["_exif"];
+
+  req.fileMetaData = {
+    width: imageSize.width,
+    height: imageSize.height,
+    metadata: JSON.stringify(tags),
+  };
 
   next();
 };

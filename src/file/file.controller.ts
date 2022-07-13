@@ -34,6 +34,7 @@ export const store = async (
     size: fileInfo.size as number,
     userId,
     postId,
+    ...req.fileMetaData,
   };
 
   console.log(fileObj);
