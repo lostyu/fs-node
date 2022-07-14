@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import multer from "multer";
 import Jimp from "jimp";
+import { imageResizer } from "./file.service";
 
 // 创建multer
 const fileUpload = multer({
@@ -39,6 +40,9 @@ export const fileProcessor = async (
     height: imageSize.height,
     metadata: JSON.stringify(tags),
   };
+
+  // 处理图片大小
+  imageResizer(image, (req as MulterRequest).file);
 
   next();
 };
