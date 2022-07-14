@@ -73,3 +73,29 @@ export const serve = async (
     next(error);
   }
 };
+
+/**
+ * 获取图片meta信息
+ */
+export const metadata = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { fileId } = req.params;
+
+  try {
+    // 查询数据
+    const fileMeta = await findFileById(Number(fileId));
+    const data = _.pick(fileMeta, [
+      "id",
+      "size",
+      "width",
+      "height",
+      "metadata",
+    ]);
+    res.send(data);
+  } catch (error) {
+    next(error);
+  }
+};

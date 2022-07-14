@@ -14,5 +14,6 @@ router.post(
 );
 
 router.get("/files/:fileId/serve", fileController.serve);
+router.get("/files/:fileId/metadata", fileController.metadata);
 
 export default router;
