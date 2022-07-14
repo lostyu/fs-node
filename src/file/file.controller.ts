@@ -1,3 +1,5 @@
+import path from "path";
+import fs from "fs";
 import { Request, Response, NextFunction } from "express";
 import _ from "lodash";
 import { createFile, findFileById } from "./file.service";
@@ -63,8 +65,37 @@ export const serve = async (
   try {
     const file = await findFileById(Number(fileId));
 
-    res.sendFile(file.filename, {
-      root: "uploads",
+    // 获取要查询的图片尺寸
+    const { size } = req.query;
+    let filename = file.filename;
+    let root = "uploads";
+    let resized = "resized";
+
+    // 有size查询参数
+    console.log(size);
+
+    if (size) {
+      // 可用图像尺寸
+      const imageSizes = ["large", "medium", "thumbnail"];
+
+      // 检查是否可用
+      if (!imageSizes.some((item) => item == size)) {
+        throw new Error("FILE_NOT_FOUND");
+      }
+
+      // 检查文件是否存在
+      const fileExist = fs.existsSync(
+        path.join(root, resized, `${filename}-${size}`)
+      );
+      if (fileExist) {
+        filename = `${filename}-${size}`;
+        root = path.join(root, resized);
+      }
+    }
+
+    // 作出响应
+    res.sendFile(filename, {
+      root,
       headers: {
         "Content-type": file.mimetype,
       },
