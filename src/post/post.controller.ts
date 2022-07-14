@@ -1,6 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import _ from "lodash";
-import { createPost, deletePost, getPosts, updatePost } from "./post.service";
+import {
+  createPost,
+  deletePost,
+  getPosts,
+  updatePost,
+  createPostTag,
+  postHasTag,
+} from "./post.service";
+import { TagModel } from "../tag/tag.model";
+import { createTag, getTagByName } from "../tag/tag.service";
 
 export const index = async (
   req: Request,
@@ -18,9 +27,6 @@ export const index = async (
 
 /**
  * 创建内容
- * @param req
- * @param res
- * @param next
  */
 export const store = async (
   req: Request,
@@ -76,5 +82,60 @@ export const destroy = async (
     res.send(data);
   } catch (error) {
     next(error);
+  }
+};
+
+/**
+ * 添加内容标签
+ */
+export const storePostTag = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { postId } = req.params;
+
+  const { name } = req.body;
+
+  let tag: TagModel;
+
+  // 查找有没有标签
+  try {
+    tag = await getTagByName(name);
+  } catch (error) {
+    return next(error);
+  }
+
+  if (tag) {
+    try {
+      // 如果有，验证内容标签
+      // tag.id as number
+      // tag.id!
+      // tag.id ?? 0;
+      const postTag = await postHasTag(Number(postId), tag.id!);
+      if (postTag) {
+        return next(new Error("POST_ALREADY_HAS_THIS_TAG"));
+      }
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  // 没有标签就创建一个标签
+  if (!tag) {
+    try {
+      const data = await createTag({ name });
+      tag = { id: data.insertId };
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  // 打标签
+  try {
+    await createPostTag(Number(postId), tag.id!);
+    res.sendStatus(201);
+  } catch (error) {
+    return next(error);
   }
 };

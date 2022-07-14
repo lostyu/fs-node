@@ -23,4 +23,11 @@ router.delete(
   postController.destroy
 );
 
+router.post(
+  "/posts/:postId/tag",
+  authGuard,
+  accessControl({ possession: true }),
+  postController.storePostTag
+);
+
 export default router;
