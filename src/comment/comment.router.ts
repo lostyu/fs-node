@@ -6,4 +6,6 @@ const router = Router();
 
 router.post("/comments", authGuard, commentController.store);
 
+router.post("/comments/:commentId/reply", authGuard, commentController.reply);
+
 export default router;
