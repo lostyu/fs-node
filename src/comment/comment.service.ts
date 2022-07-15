@@ -46,6 +46,8 @@ export const updateComment = async (comment: CommentModel) => {
 export const deleteComment = async (commentId: number) => {
   const statement = `DELETE FROM comment WHERE id=?`;
 
+  console.log(statement);
+
   const [data] = await connection.promise().query(statement, commentId);
 
   return data;
