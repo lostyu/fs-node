@@ -4,6 +4,7 @@ import {
   createComment,
   isReplyComment,
   updateComment,
+  deleteComment,
 } from "./comment.service";
 
 /**
@@ -88,6 +89,24 @@ export const update = async (
 
   try {
     const data = await updateComment(comment);
+    res.send(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * 删除评论
+ */
+export const destroy = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { commentId } = req.params;
+
+  try {
+    const data = await deleteComment(Number(commentId));
     res.send(data);
   } catch (error) {
     next(error);

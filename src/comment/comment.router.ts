@@ -15,4 +15,11 @@ router.patch(
   commentController.update
 );
 
+router.delete(
+  "/comments/:commentId",
+  authGuard,
+  accessControl({ possession: true }),
+  commentController.destroy
+);
+
 export default router;
