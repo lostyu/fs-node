@@ -3,5 +3,5 @@ export class CommentModel {
   content?: string;
   postId?: number;
   userId?: number;
-  parentId?: null;
+  parentId?: number;
 }

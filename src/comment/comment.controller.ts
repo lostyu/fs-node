@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { CommentModel } from "./comment.model";
 import { createComment, isReplyComment } from "./comment.service";
 
 /**
@@ -38,7 +39,7 @@ export const reply = async (
   // 准备数据
   const { commentId } = req.params;
   const parentId = Number(commentId);
-  const { id: userId } = req.user;
+  let { id: userId } = req.user;
   const { content, postId } = req.body;
 
   const comment = {
@@ -55,5 +56,12 @@ export const reply = async (
     }
   } catch (error) {
     return next(error);
+  }
+
+  try {
+    const data = await createComment(comment);
+    res.status(201).send(data);
+  } catch (error) {
+    next(error);
   }
 };
