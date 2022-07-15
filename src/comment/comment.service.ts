@@ -27,3 +27,15 @@ export const isReplyComment = async (commentId: number) => {
 
   return (data as RowDataPacket)[0].parentId ? true : false;
 };
+
+/**
+ * 修改评论
+ */
+export const updateComment = async (comment: CommentModel) => {
+  const { id, content } = comment;
+  const statement = `UPDATE comment SET content=? WHERE id=?`;
+
+  const [data] = await connection.promise().query(statement, [content, id]);
+
+  return data;
+};
