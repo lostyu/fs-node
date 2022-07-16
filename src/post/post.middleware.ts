@@ -27,3 +27,41 @@ export const sort = async (req: Request, res: Response, next: NextFunction) => {
 
   next();
 };
+
+/**
+ * 过滤列表中间件
+ */
+export const filter = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // 解构查询符
+  const { tag, user, action } = req.query;
+
+  // 设置默认过滤
+  req.filter = {
+    name: "default",
+    sql: "post.id IS NOT NULL",
+  };
+
+  // 按标签名过滤
+  if (tag && !user && !action) {
+    req.filter = {
+      name: "tagName",
+      sql: "tag.name = ?",
+      param: tag as string,
+    };
+  }
+
+  // 过滤出用户发布的内容
+  if (user && action == "published" && !tag) {
+    req.filter = {
+      name: "userPublished",
+      sql: "user.id = ?",
+      param: user as string,
+    };
+  }
+
+  next();
+};
