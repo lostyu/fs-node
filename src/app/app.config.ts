@@ -19,3 +19,6 @@ export const { MD5_SALT } = process.env;
 
 // key
 export const { PRIVATE_KEY, PUBLIC_KEY } = process.env;
+
+// 分页页码
+export const { POSTS_PER_PAGE } = process.env;

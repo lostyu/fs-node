@@ -8,6 +8,7 @@ import {
   createPostTag,
   postHasTag,
   deletePostTag,
+  getPostsTotalCount,
 } from "./post.service";
 import { TagModel } from "../tag/tag.model";
 import { createTag, getTagByName } from "../tag/tag.service";
@@ -18,7 +19,19 @@ export const index = async (
   next: NextFunction
 ) => {
   try {
-    const posts = await getPosts({ sort: req.sort, filter: req.filter });
+    const totalCount = await getPostsTotalCount({ filter: req.filter });
+
+    res.header("X-Total-Count", totalCount);
+  } catch (error) {
+    next(error);
+  }
+
+  try {
+    const posts = await getPosts({
+      sort: req.sort,
+      filter: req.filter,
+      pagination: req.pagination,
+    });
 
     res.send(posts);
   } catch (error) {
