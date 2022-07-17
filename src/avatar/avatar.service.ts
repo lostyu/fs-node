@@ -1,3 +1,4 @@
+import { RowDataPacket } from "mysql2";
 import { connection } from "../app/database/mysql";
 import { AvatarModel } from "./avatar.model";
 
@@ -12,4 +13,21 @@ export const createAvatar = async (avatar: AvatarModel) => {
   const data = await connection.promise().query(statement, avatar);
 
   return data;
+};
+
+/**
+ * 按用户id查询头像
+ */
+export const findAvatarByUserId = async (userId: number) => {
+  const statement = `
+    SELECT *
+    FROM avatar
+    WHERE userId=?
+    ORDER BY avatar.id DESC
+    LIMIT 1
+  `;
+
+  const [data] = await connection.promise().query(statement, userId);
+
+  return (data as RowDataPacket)[0];
 };
