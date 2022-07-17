@@ -6,6 +6,7 @@ import fileRouter from "../file/file.router";
 import tagRouter from "../tag/tag.router";
 import avatarRouter from "../avatar/avatar.router";
 import commentRouter from "../comment/comment.router";
+import likeRouter from "../like/like.router";
 
 import { defaultErrorHandler } from "./app.middleware";
 
@@ -22,7 +23,8 @@ app.use(
   fileRouter,
   tagRouter,
   commentRouter,
-  avatarRouter
+  avatarRouter,
+  likeRouter
 );
 
 // 处理异常
