@@ -63,6 +63,14 @@ export const filter = async (
       param: user as string,
     };
   }
+  // 过滤出用户赞过的内容
+  if (user && action == "liked" && !tag) {
+    req.filter = {
+      name: "userLiked",
+      sql: "user_like_post.userId = ?",
+      param: user as string,
+    };
+  }
 
   next();
 };
