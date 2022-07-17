@@ -4,6 +4,7 @@ import userRouter from "../user/user.router";
 import authRouter from "../auth/auth.router";
 import fileRouter from "../file/file.router";
 import tagRouter from "../tag/tag.router";
+import avatarRouter from "../avatar/avatar.router";
 import commentRouter from "../comment/comment.router";
 
 import { defaultErrorHandler } from "./app.middleware";
@@ -20,7 +21,8 @@ app.use(
   authRouter,
   fileRouter,
   tagRouter,
-  commentRouter
+  commentRouter,
+  avatarRouter
 );
 
 // 处理异常
