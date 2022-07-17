@@ -12,4 +12,6 @@ router.post(
   avatarController.store
 );
 
+router.get("/users/:userId/avatar", avatarController.serve);
+
 export default router;
