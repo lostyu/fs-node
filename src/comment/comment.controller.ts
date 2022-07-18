@@ -123,7 +123,10 @@ export const index = async (
   next: NextFunction
 ) => {
   try {
-    const comments = await getComments({ filter: req.filter });
+    const comments = await getComments({
+      filter: req.filter,
+      pagination: req.pagination,
+    });
     res.send(comments);
   } catch (error) {
     next(error);

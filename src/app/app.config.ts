@@ -22,3 +22,4 @@ export const { PRIVATE_KEY, PUBLIC_KEY } = process.env;
 
 // 分页页码
 export const POSTS_PER_PAGE = Number(process.env["POSTS_PER_PAGE"]);
+export const COMMENTS_PER_PAGE = Number(process.env["COMMENTS_PER_PAGE"]);

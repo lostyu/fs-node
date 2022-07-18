@@ -1,6 +1,9 @@
 import { RowDataPacket } from "mysql2";
 import { connection } from "../app/database/mysql";
-import { GetPostsOptionsFilter } from "../post/post.service";
+import {
+  GetPostsOptionsFilter,
+  GetPostsOptionsPagination,
+} from "../post/post.service";
 import { CommentModel } from "./comment.model";
 import { sqlFragment } from "./comment.provider";
 
@@ -60,12 +63,13 @@ export const deleteComment = async (commentId: number) => {
  */
 interface GetCommentOptions {
   filter?: GetPostsOptionsFilter;
+  pagination?: GetPostsOptionsPagination;
 }
 
 export const getComments = async (options: GetCommentOptions) => {
-  const { filter } = options;
+  const { filter, pagination } = options;
 
-  let params: Array<any> = [];
+  let params: Array<any> = [pagination?.limit, pagination?.offset];
 
   if (filter?.param) {
     params = [filter.param, ...params];
@@ -87,6 +91,8 @@ export const getComments = async (options: GetCommentOptions) => {
       ${filter?.sql}
     GROUP BY comment.id
     ORDER BY comment.id DESC
+    LIMIT ?
+    OFFSET ?
   `;
 
   console.log(statement);
