@@ -7,6 +7,7 @@ import {
   deleteComment,
   getComments,
   getCommentsTotalCount,
+  getCommentReplies,
 } from "./comment.service";
 
 /**
@@ -136,6 +137,24 @@ export const index = async (
       pagination: req.pagination,
     });
     res.send(comments);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * 回复列表接口
+ */
+export const indexReplies = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { commentId } = req.params;
+
+  try {
+    const data = await getCommentReplies({ commentId: Number(commentId) });
+    res.send(data);
   } catch (error) {
     next(error);
   }

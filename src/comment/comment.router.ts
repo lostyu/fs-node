@@ -32,4 +32,6 @@ router.get(
   commentController.index
 );
 
+router.get("/comments/:commentId/replies", commentController.indexReplies);
+
 export default router;
