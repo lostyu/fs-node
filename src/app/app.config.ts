@@ -21,4 +21,4 @@ export const { MD5_SALT } = process.env;
 export const { PRIVATE_KEY, PUBLIC_KEY } = process.env;
 
 // 分页页码
-export const { POSTS_PER_PAGE } = process.env;
+export const POSTS_PER_PAGE = Number(process.env["POSTS_PER_PAGE"]);
