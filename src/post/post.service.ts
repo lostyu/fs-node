@@ -164,3 +164,35 @@ export const getPostsTotalCount = async (options: GetPostsOptions) => {
 
   return (data as RowDataPacket)[0].total;
 };
+
+/**
+ * 根据id获取post数据
+ */
+export const getPostById = async (postId: number) => {
+  const statement = `
+    SELECT 
+      post.id,
+      post.title,
+      post.content,
+      ${sqlFragment.user},
+      ${sqlFragment.file},
+      ${sqlFragment.tags},
+      ${sqlFragment.totalComments},
+      ${sqlFragment.totalLikes}
+    FROM 
+      post
+      ${sqlFragment.leftJoinUser}
+      ${sqlFragment.leftJoinOneFile}
+      ${sqlFragment.leftJoinTag}
+    WHERE 
+      post.id = ?
+  `;
+
+  const [data] = await connection.promise().query(statement, postId);
+
+  if (!(data as RowDataPacket)[0].id) {
+    throw new Error("NOT_FOUND");
+  }
+
+  return (data as RowDataPacket)[0];
+};
