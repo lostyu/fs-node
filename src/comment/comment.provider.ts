@@ -22,4 +22,17 @@ export const sqlFragment = {
     LEFT JOIN post
       ON post.id = comment.postId
   `,
+  repliedComment: `
+    (
+      SELECT 
+        JSON_OBJECT(
+          'id', repliedComment.id,
+          'content', repliedComment.content
+        )
+      FROM 
+          comment repliedComment
+      WHERE 
+          comment.parentId = repliedComment.id
+    ) AS repliedComment
+  `,
 };

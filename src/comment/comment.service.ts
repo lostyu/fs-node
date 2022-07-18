@@ -77,6 +77,7 @@ export const getComments = async (options: GetCommentOptions) => {
       comment.content,
       ${sqlFragment.post},
       ${sqlFragment.user}
+      ${filter?.name == "userReplied" ? `, ${sqlFragment.repliedComment}` : ""}
     FROM
       comment
     ${sqlFragment.leftJoinUser}
@@ -86,6 +87,8 @@ export const getComments = async (options: GetCommentOptions) => {
     GROUP BY comment.id
     ORDER BY comment.id DESC
   `;
+
+  console.log(statement);
 
   const [data] = await connection.promise().query(statement, params);
 
