@@ -32,5 +32,13 @@ export const filter = async (
     };
   }
 
+  if (user && action == "replied" && !post) {
+    req.filter = {
+      name: "userReplied",
+      sql: "comment.parentId IS NOT NULL AND comment.userId = ?",
+      param: user as string,
+    };
+  }
+
   next();
 };
