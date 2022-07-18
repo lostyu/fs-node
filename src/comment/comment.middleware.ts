@@ -24,5 +24,13 @@ export const filter = async (
     };
   }
 
+  if (user && action == "published" && !post) {
+    req.filter = {
+      name: "userPublished",
+      sql: "comment.parentId IS NULL AND comment.userId = ?",
+      param: user as string,
+    };
+  }
+
   next();
 };
