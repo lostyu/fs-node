@@ -5,6 +5,7 @@ import {
   isReplyComment,
   updateComment,
   deleteComment,
+  getComments,
 } from "./comment.service";
 
 /**
@@ -108,6 +109,22 @@ export const destroy = async (
   try {
     const data = await deleteComment(Number(commentId));
     res.send(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * 评论列表
+ */
+export const index = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const comments = await getComments();
+    res.send(comments);
   } catch (error) {
     next(error);
   }

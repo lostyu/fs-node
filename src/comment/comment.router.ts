@@ -22,4 +22,6 @@ router.delete(
   commentController.destroy
 );
 
+router.get("/comments", commentController.index);
+
 export default router;
