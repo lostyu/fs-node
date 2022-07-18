@@ -101,3 +101,30 @@ export const getComments = async (options: GetCommentOptions) => {
 
   return data;
 };
+
+/**
+ * 统计评论数量
+ */
+export const getCommentsTotalCount = async (options: GetCommentOptions) => {
+  const { filter } = options;
+
+  let params: Array<any> = [];
+
+  if (filter?.param) {
+    params = [filter.param, ...params];
+  }
+
+  const statement = `
+    SELECT
+      COUNT(DISTINCT comment.id) AS total
+    FROM comment
+    ${sqlFragment.leftJoinPost}
+    ${sqlFragment.leftJoinUser}
+    WHERE
+      ${filter?.sql}
+  `;
+
+  const [data] = await connection.promise().query(statement, params);
+
+  return (data as RowDataPacket)[0].total;
+};
