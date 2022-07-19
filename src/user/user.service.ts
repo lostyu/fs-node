@@ -17,24 +17,39 @@ export const createUser = async (user: UserModel) => {
 };
 
 /**
- * 通过用户名查找
+ * 查找用户
  */
 interface GetUserOptions {
   password?: boolean;
 }
 
-export const getUserByName = async (
-  name: string,
-  options: GetUserOptions = {}
-) => {
-  const { password } = options;
+export const getUser = (condition: string) => {
+  return async (param: string | number, options: GetUserOptions = {}) => {
+    const { password } = options;
 
-  const statement = `
-    SELECT id, name ${password ? ", password " : ""} FROM user WHERE name = ?
-  `;
+    const statement = `
+      SELECT 
+        user.id, 
+        user.name,
+        IF(
+          COUNT(avatar.id), 1, NULL
+        ) AS avatar
+        ${password ? ", password " : ""} 
+      FROM user 
+      LEFT JOIN avatar
+          ON avatar.userId = user.id
+      WHERE 
+        ${condition} = ?
+    `;
 
-  const [data] = await connection.promise().query(statement, name);
+    const [data] = await connection.promise().query(statement, param);
 
-  // return (data as RowDataPacket[])[0];
-  return (data as RowDataPacket)[0];
+    return (data as RowDataPacket)[0].id ? (data as RowDataPacket)[0] : null;
+  };
 };
+
+/**
+ * 通过用户名查找
+ */
+export const getUserByName = getUser("user.name");
+export const getUserById = getUser("user.id");
