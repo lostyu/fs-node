@@ -88,7 +88,14 @@ export const validateUpdateUserData = async (
       // hash密码
       req.body.update.password = md5(update.password + MD5_SALT);
     }
+
+    // 如果没有更新内容，抛出异常
+    if (update.name == "" || update.password == "") {
+      return next(new Error("REQUIRED_NAME_OR_PASSWORD"));
+    }
   } catch (error) {
     return next(error);
   }
+
+  next();
 };

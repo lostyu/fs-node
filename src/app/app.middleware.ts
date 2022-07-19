@@ -80,6 +80,11 @@ export const defaultErrorHandler = (
       message = "没有找到这个用户";
       break;
 
+    case "REQUIRED_NAME_OR_PASSWORD":
+      statusCode = 400;
+      message = "请输入要更新的用户名或密码";
+      break;
+
     default:
       statusCode = 500;
       message = "服务器错误";

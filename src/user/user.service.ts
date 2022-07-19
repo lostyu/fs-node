@@ -66,6 +66,8 @@ export const updateUser = async (userId: number, userData: UserModel) => {
 
   const params = [userData, userId];
 
+  console.log(statement);
+
   const [data] = await connection.promise().query(statement, params);
 
   return data;
