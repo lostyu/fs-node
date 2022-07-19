@@ -38,6 +38,11 @@ export const defaultErrorHandler = (
       statusCode = 400;
       message = "用户密码错误";
       break;
+    case "PASSWORD_IS_THE_SAME":
+      statusCode = 400;
+      message = "要修改的密码不能和原来的密码一样";
+      break;
+
     case "UNAUTHORIZED":
       statusCode = 401;
       message = "请先登录";
