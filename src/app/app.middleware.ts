@@ -70,6 +70,10 @@ export const defaultErrorHandler = (
       statusCode = 404;
       message = "没有找到内容";
       break;
+    case "NOT_FOUND_USER":
+      statusCode = 404;
+      message = "没有找到这个用户";
+      break;
 
     default:
       statusCode = 500;
