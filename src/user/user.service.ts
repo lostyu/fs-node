@@ -53,3 +53,20 @@ export const getUser = (condition: string) => {
  */
 export const getUserByName = getUser("user.name");
 export const getUserById = getUser("user.id");
+
+/**
+ * 更新用户
+ */
+export const updateUser = async (userId: number, userData: UserModel) => {
+  const statement = `
+    UPDATE user
+    SET ?
+    WHERE user.id = ?
+  `;
+
+  const params = [userData, userId];
+
+  const [data] = await connection.promise().query(statement, params);
+
+  return data;
+};
