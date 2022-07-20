@@ -4,6 +4,8 @@ import { connection } from "../app/database/mysql";
 import { signToken } from "../auth/auth.service";
 import { deleteUser, getUserById } from "./user.service";
 import { UserModel } from "./user.model";
+import { md5 } from "../utils/md5";
+import { MD5_SALT } from "../app/app.config";
 
 // 准备测试数据
 const testUser: UserModel = {
@@ -81,5 +83,54 @@ describe("测试用户账户接口", () => {
     const response = await request(app).get(`/users/-1`);
 
     expect(response.status).toBe(404);
+  });
+});
+
+/**
+ * 更新用户
+ */
+describe("测试用户更新接口", () => {
+  test("更新用户时需要验证用户身份", async () => {
+    const response = await request(app).patch(`/users`);
+
+    expect(response.status).toBe(401);
+  });
+
+  // 更新用户数据，需要签发令牌
+  test("更新用户数据", async () => {
+    const token = signToken({
+      payload: {
+        id: testUserCreated.id,
+        name: testUserCreated.name,
+      },
+    });
+
+    // 请求接口
+    const response = await request(app)
+      .patch("/users")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        validate: {
+          password: testUser.password,
+        },
+        update: {
+          name: testUserUpdated.name,
+          password: testUserUpdated.password,
+        },
+      });
+
+    // 调取用户
+    const user = await getUserById(testUserCreated.id as number, {
+      password: true,
+    });
+
+    // 对比密码是否匹配
+    const matched =
+      user.password == md5((testUserUpdated.password as string) + MD5_SALT);
+
+    // 断言
+    expect(response.status).toBe(200);
+    expect(matched).toBeTruthy();
+    expect(user.name).toBe(testUserUpdated.name);
   });
 });
