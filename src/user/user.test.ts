@@ -60,3 +60,26 @@ describe("测试创建用户接口", () => {
     expect(response.status).toBe(201);
   });
 });
+
+/**
+ * 用户账户
+ */
+describe("测试用户账户接口", () => {
+  test("响应里应该包含指定属性", async () => {
+    const response = await request(app).get(`/users/${testUserCreated.id}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.name).toBe(testUserCreated.name);
+    expect(response.body).toMatchObject({
+      id: expect.any(Number),
+      name: expect.any(String),
+      avatar: null,
+    });
+  });
+
+  test("当用户不存在时，响应状态码是 404", async () => {
+    const response = await request(app).get(`/users/-1`);
+
+    expect(response.status).toBe(404);
+  });
+});
